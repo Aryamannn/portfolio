@@ -149,7 +149,7 @@ const projectsData = [
 
 const GradientText = ({ children, className = "" }) => (
   <span
-    className={`bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent ${className}`}
+    className={`bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent ${className}`}
   >
     {children}
   </span>
@@ -157,7 +157,7 @@ const GradientText = ({ children, className = "" }) => (
 
 const GlassCard = ({ children, className = "" }) => (
   <div
-    className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-violet-500/30 hover:bg-white/[0.07] transition-all duration-300 ${className}`}
+    className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-orange-500/30 hover:bg-white/[0.07] transition-all duration-300 ${className}`}
   >
     {children}
   </div>
@@ -179,7 +179,7 @@ const SectionHeading = ({ title, subtitle }) => (
         {subtitle}
       </p>
     )}
-    <div className="mt-5 h-1 w-20 mx-auto bg-gradient-to-r from-violet-500 to-pink-500 rounded-full" />
+    <div className="mt-5 h-1 w-20 mx-auto bg-gradient-to-r from-orange-500 to-red-500 rounded-full" />
   </motion.div>
 );
 
@@ -191,15 +191,15 @@ const SkillBar = ({ name, level, delay = 0 }) => {
     <div ref={ref} className="mb-5">
       <div className="flex justify-between mb-2 text-sm">
         <span className="text-gray-300 font-medium">{name}</span>
-        <span className="text-violet-400 font-semibold">{level}%</span>
+        <span className="text-orange-400 font-semibold">{level}%</span>
       </div>
       <div className="h-2 bg-white/10 rounded-full overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={isInView ? { width: `${level}%` } : {}}
           transition={{ duration: 1.2, ease: "easeOut", delay }}
-          className="h-full bg-gradient-to-r from-violet-500 to-pink-500 rounded-full"
-          style={{ boxShadow: "0 0 8px rgba(124, 58, 237, 0.5)" }}
+          className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
+          style={{ boxShadow: "0 0 8px rgba(234, 88, 12, 0.5)" }}
         />
       </div>
     </div>
@@ -291,9 +291,9 @@ const Hero = () => (
     className="min-h-screen flex items-center pt-16 relative overflow-hidden"
   >
     {/* Background blobs */}
-    <div className="absolute top-1/4 left-1/6 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl animate-float pointer-events-none" />
-    <div className="absolute bottom-1/3 right-1/4 w-60 h-60 bg-pink-600/10 rounded-full blur-3xl animate-float-delayed pointer-events-none" />
-    <div className="absolute top-2/3 left-1/2 w-40 h-40 bg-cyan-600/8 rounded-full blur-3xl animate-float-slow pointer-events-none" />
+    <div className="absolute top-1/4 left-1/6 w-80 h-80 bg-orange-600/10 rounded-full blur-3xl animate-float pointer-events-none" />
+    <div className="absolute bottom-1/3 right-1/4 w-60 h-60 bg-red-600/10 rounded-full blur-3xl animate-float-delayed pointer-events-none" />
+    <div className="absolute top-2/3 left-1/2 w-40 h-40 bg-amber-600/8 rounded-full blur-3xl animate-float-slow pointer-events-none" />
 
     <div className="max-w-6xl mx-auto px-4 md:px-8 w-full py-20">
       <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
@@ -308,7 +308,7 @@ const Hero = () => (
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-violet-400 font-medium mb-3 tracking-widest text-sm uppercase"
+            className="text-orange-400 font-medium mb-3 tracking-widest text-sm uppercase"
           >
             Welcome to my portfolio
           </motion.p>
@@ -342,13 +342,13 @@ const Hero = () => (
           >
             <a
               href="#projects"
-              className="px-8 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-pink-600 text-white font-semibold hover:opacity-90 hover:scale-105 transition-all shadow-lg shadow-violet-500/25"
+              className="px-8 py-3 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold hover:opacity-90 hover:scale-105 transition-all shadow-lg shadow-orange-500/25"
             >
               View Projects
             </a>
             <a
               href="#contact"
-              className="px-8 py-3 rounded-xl border border-white/10 text-gray-300 font-semibold hover:border-violet-500/50 hover:text-white hover:bg-white/5 transition-all"
+              className="px-8 py-3 rounded-xl border border-white/10 text-gray-300 font-semibold hover:border-orange-500/50 hover:text-white hover:bg-white/5 transition-all"
             >
               Contact Me
             </a>
@@ -373,7 +373,7 @@ const Hero = () => (
                 whileHover={{ scale: 1.1, y: -3 }}
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
               >
-                <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 group-hover:border-violet-500/40 group-hover:bg-violet-500/10 transition-all">
+                <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 group-hover:border-orange-500/40 group-hover:bg-orange-500/10 transition-all">
                   <s.icon className="w-4 h-4" />
                 </div>
                 <span className="text-sm hidden sm:block">{s.label}</span>
@@ -390,8 +390,8 @@ const Hero = () => (
           className="relative flex-shrink-0"
         >
           <div className="relative w-60 h-72 md:w-80 md:h-96">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-600/40 to-pink-600/40 blur-2xl" />
-            <div className="relative w-full h-full rounded-2xl overflow-hidden border border-violet-500/30">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-orange-600/40 to-red-600/40 blur-2xl" />
+            <div className="relative w-full h-full rounded-2xl overflow-hidden border border-orange-500/30">
               <Image
                 src="/profile.jpg"
                 alt="Aryaman Mishra"
@@ -444,16 +444,16 @@ const Education = () => (
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.15 }}
           >
-            <GlassCard className="p-6 border-l-2 border-l-violet-500/60">
+            <GlassCard className="p-6 border-l-2 border-l-orange-500/60">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <GraduationCap className="w-4 h-4 text-violet-400 flex-shrink-0" />
+                    <GraduationCap className="w-4 h-4 text-orange-400 flex-shrink-0" />
                     <h3 className="text-white font-bold text-lg leading-tight">
                       {edu.school}
                     </h3>
                   </div>
-                  <p className="text-violet-300 font-medium ml-6">{edu.degree}</p>
+                  <p className="text-orange-300 font-medium ml-6">{edu.degree}</p>
                 </div>
                 <div className="flex flex-col items-start sm:items-end gap-1 ml-6 sm:ml-0 flex-shrink-0">
                   <span className="text-gray-400 text-sm flex items-center gap-1">
@@ -486,7 +486,7 @@ const Education = () => (
 
 const Skills = () => (
   <section id="skills" className="py-24 relative">
-    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet-950/5 to-transparent pointer-events-none" />
+    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange-950/5 to-transparent pointer-events-none" />
     <div className="max-w-6xl mx-auto px-4 md:px-8">
       <SectionHeading title="Skills" subtitle="Technologies and tools I work with" />
 
@@ -501,8 +501,8 @@ const Skills = () => (
           >
             <GlassCard className="p-6 h-full">
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2.5 rounded-xl bg-violet-500/20 border border-violet-500/20">
-                  <cat.icon className="w-5 h-5 text-violet-400" />
+                <div className="p-2.5 rounded-xl bg-orange-500/20 border border-orange-500/20">
+                  <cat.icon className="w-5 h-5 text-orange-400" />
                 </div>
                 <h3 className="text-white font-bold text-lg">{cat.category}</h3>
               </div>
@@ -535,7 +535,7 @@ const Skills = () => (
             viewport={{ once: true }}
             transition={{ delay: i * 0.04 }}
             whileHover={{ scale: 1.08, y: -2 }}
-            className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 hover:border-violet-500/40 hover:text-white hover:bg-violet-500/10 transition-all cursor-default"
+            className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 hover:border-orange-500/40 hover:text-white hover:bg-orange-500/10 transition-all cursor-default"
           >
             {tech}
           </motion.span>
@@ -562,15 +562,15 @@ const Experience = () => (
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.15 }}
           >
-            <GlassCard className="p-6 border-l-2 border-l-pink-500/60">
+            <GlassCard className="p-6 border-l-2 border-l-red-500/60">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                 <div className="flex items-start gap-2">
-                  <Briefcase className="w-4 h-4 text-pink-400 flex-shrink-0 mt-1" />
+                  <Briefcase className="w-4 h-4 text-red-400 flex-shrink-0 mt-1" />
                   <div>
                     <h3 className="text-white font-bold text-lg leading-tight">
                       {exp.title}
                     </h3>
-                    <p className="text-pink-300 font-medium">{exp.company}</p>
+                    <p className="text-red-300 font-medium">{exp.company}</p>
                   </div>
                 </div>
                 <div className="flex flex-col items-start sm:items-end gap-1 ml-6 sm:ml-0 flex-shrink-0">
@@ -587,7 +587,7 @@ const Experience = () => (
               <ul className="space-y-2.5 ml-6">
                 {exp.achievements.map((a, j) => (
                   <li key={j} className="text-gray-400 text-sm flex items-start gap-2.5">
-                    <span className="mt-2 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-violet-400 inline-block" />
+                    <span className="mt-2 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-orange-400 inline-block" />
                     {a}
                   </li>
                 ))}
@@ -606,7 +606,7 @@ const Experience = () => (
 
 const Projects = () => (
   <section id="projects" className="py-24 relative">
-    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-pink-950/5 to-transparent pointer-events-none" />
+    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-950/5 to-transparent pointer-events-none" />
     <div className="max-w-6xl mx-auto px-4 md:px-8">
       <SectionHeading title="Projects" subtitle="Things I've built" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -622,7 +622,7 @@ const Projects = () => (
           >
             <GlassCard className="p-0 overflow-hidden h-full flex flex-col">
               {/* Gradient top bar */}
-              <div className="h-1 w-full bg-gradient-to-r from-violet-500 to-pink-500" />
+              <div className="h-1 w-full bg-gradient-to-r from-orange-500 to-red-500" />
               <div className="p-6 flex flex-col flex-1">
                 <h3 className="text-white font-bold text-xl mb-3">
                   {project.title}
@@ -634,7 +634,7 @@ const Projects = () => (
                   {project.tags.map((tag, j) => (
                     <span
                       key={j}
-                      className="px-3 py-1 bg-violet-500/10 border border-violet-500/20 text-violet-300 rounded-full text-xs font-medium"
+                      className="px-3 py-1 bg-orange-500/10 border border-orange-500/20 text-orange-300 rounded-full text-xs font-medium"
                     >
                       {tag}
                     </span>
@@ -648,7 +648,7 @@ const Projects = () => (
                       rel="noopener noreferrer"
                       className="flex items-center gap-1.5 text-sm text-gray-300 hover:text-white transition-colors group"
                     >
-                      <ExternalLink className="w-4 h-4 text-violet-400 group-hover:text-violet-300" />
+                      <ExternalLink className="w-4 h-4 text-orange-400 group-hover:text-orange-300" />
                       Live Demo
                     </a>
                   )}
@@ -734,8 +734,8 @@ const Contact = () => {
                     whileHover={{ x: 4 }}
                     className="flex items-center gap-4 group"
                   >
-                    <div className="p-2.5 rounded-xl bg-violet-500/10 border border-violet-500/20 group-hover:bg-violet-500/20 transition-all">
-                      <c.icon className="w-4 h-4 text-violet-400" />
+                    <div className="p-2.5 rounded-xl bg-orange-500/10 border border-orange-500/20 group-hover:bg-orange-500/20 transition-all">
+                      <c.icon className="w-4 h-4 text-orange-400" />
                     </div>
                     <div>
                       <p className="text-xs text-gray-500 mb-0.5">{c.label}</p>
@@ -771,7 +771,7 @@ const Contact = () => {
                       type={field.type}
                       name={field.id}
                       required
-                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-gray-300 placeholder-gray-600 focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.07] transition-all text-sm"
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-gray-300 placeholder-gray-600 focus:outline-none focus:border-orange-500/50 focus:bg-white/[0.07] transition-all text-sm"
                     />
                   </div>
                 ))}
@@ -783,12 +783,12 @@ const Contact = () => {
                     name="message"
                     rows={4}
                     required
-                    className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-gray-300 placeholder-gray-600 focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.07] transition-all resize-none text-sm"
+                    className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-gray-300 placeholder-gray-600 focus:outline-none focus:border-orange-500/50 focus:bg-white/[0.07] transition-all resize-none text-sm"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-3 bg-gradient-to-r from-violet-600 to-pink-600 text-white font-semibold rounded-xl hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-violet-500/20"
+                  className="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold rounded-xl hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20"
                 >
                   Send Message
                 </button>
