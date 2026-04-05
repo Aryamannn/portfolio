@@ -1,617 +1,858 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Mail, Phone, Github, Linkedin } from 'lucide-react';
+import React, { useState, useRef } from "react";
+import {
+  Mail,
+  Phone,
+  Github,
+  Linkedin,
+  ExternalLink,
+  ChevronDown,
+  Code2,
+  Database,
+  Cpu,
+  Briefcase,
+  GraduationCap,
+  MapPin,
+  Calendar,
+  Menu,
+  X,
+} from "lucide-react";
 import Image from "next/image";
-import { motion } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from "framer-motion";
 
-// Animation configurations
-const fadeInUp = {
-  initial: {
-    y: 60,
-    opacity: 0
-  },
-  animate: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut"
-    }
-  }
-};
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
 
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
+const educationData = [
+  {
+    school: "California State University, Monterey Bay",
+    degree: "Bachelor of Science in Computer Science",
+    date: "Dec. 2024",
+    location: "California, USA",
+    coursework:
+      "Data Structures, Algorithms, Databases, Computer Systems, Machine Learning",
+  },
+  {
+    school: "Vidyalankar Institute for International Education",
+    degree: "B.Tech in Computer Engineering",
+    date: "Aug. 2023",
+    location: "Mumbai, India",
+  },
+];
 
-const scaleUp = {
-  initial: {
-    scale: 0.8,
-    opacity: 0
+const skillsData = [
+  {
+    category: "Languages",
+    icon: Code2,
+    skills: [
+      { name: "Python", level: 90 },
+      { name: "JavaScript", level: 85 },
+      { name: "TypeScript", level: 80 },
+      { name: "SQL", level: 85 },
+      { name: "Java", level: 70 },
+      { name: "C++", level: 65 },
+    ],
   },
-  animate: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      duration: 0.5
-    }
+  {
+    category: "AI & Data",
+    icon: Cpu,
+    skills: [
+      { name: "Gemini API", level: 90 },
+      { name: "LLM Integration", level: 85 },
+      { name: "Power BI", level: 80 },
+      { name: "ETL Pipelines", level: 75 },
+      { name: "Data Modeling", level: 75 },
+    ],
   },
-  hover: {
-    scale: 1.03,
-    transition: {
-      duration: 0.2
-    }
-  }
-};
+  {
+    category: "Tools & Frameworks",
+    icon: Database,
+    skills: [
+      { name: "React / Next.js", level: 85 },
+      { name: "FastAPI", level: 80 },
+      { name: "PostgreSQL / Supabase", level: 80 },
+      { name: "Git / Docker", level: 88 },
+      { name: "AWS", level: 65 },
+    ],
+  },
+];
 
-const profileImageAnimation = {
-  initial: { 
-    scale: 0.5, 
-    opacity: 0 
-  },
-  animate: { 
-    scale: 1, 
-    opacity: 1,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut"
-    }
-  },
-  hover: {
-    scale: 1.05,
-    transition: {
-      duration: 0.3
-    }
-  }
-};
+const techBadges = [
+  "Python", "JavaScript", "TypeScript", "SQL", "Java", "C++",
+  "React", "Next.js", "FastAPI", "Node.js", "PostgreSQL", "Supabase",
+  "Gemini API", "Power BI", "Docker", "AWS", "Git", "Tailwind CSS",
+];
 
-const socialIconAnimation = {
-  initial: { 
-    scale: 0 
+const experienceData = [
+  {
+    title: "POS-IT Admin",
+    company: "Compass Group",
+    duration: "Jan. 2025 – Present",
+    location: "California, USA",
+    achievements: [
+      "Built automated sales reporting pipeline using SQL and Power BI, replacing manual Excel workflows and reducing reporting time by 60%",
+      "Designed real-time inventory dashboards that identified cost-saving opportunities across retail locations",
+      "Troubleshot and resolved POS system issues across multiple campus locations, maintaining 99%+ uptime during peak service hours",
+      "Consolidated data from ServiceNow, POS, and inventory systems to streamline event planning and financial reporting",
+    ],
   },
-  animate: { 
-    scale: 1 
+  {
+    title: "Front End Development Intern",
+    company: "Morfeed",
+    duration: "Feb. 2023 – May 2023",
+    location: "Mumbai, India",
+    achievements: [
+      "Refactored front-end components to fix rendering bugs, improving page load times by 30%",
+      "Collaborated with backend team to integrate APIs, reducing data fetch errors and improving user experience",
+    ],
   },
-  hover: { 
-    scale: 1.2,
-    rotate: 12,
-    transition: { 
-      duration: 0.2 
-    }
-  }
-};
+];
 
-// Motion Components
-const MotionHeading = ({ children, delay = 0 }) => (
+const projectsData = [
+  {
+    title: "DocMiddleware",
+    description:
+      "AI-powered document processing platform that extracts invoice data using Gemini API, achieving 100% confidence on 141 documents with 4.9s average latency. Features custom schema builder and human-in-the-loop review workflow with status tracking.",
+    tags: ["Supabase", "Gemini API", "React"],
+    links: {
+      demo: "https://gina-two.vercel.app/dashboard",
+      github: "https://github.com/Aryamannn/docmiddleware",
+    },
+  },
+  {
+    title: "AI Chatbot Dashboard",
+    description:
+      "Multi-tenant AI assistant platform transforming knowledge bases into customer-facing chatbots with no training required. One-click embed system and zero-trust architecture ensuring user data is never stored or used for model training.",
+    tags: ["FastAPI", "Supabase", "Gemini API", "React"],
+    links: {
+      demo: "https://ai-chatbot-beta-six-30.vercel.app/#features",
+      github: "https://github.com/Aryamannn/ai-chatbot-dashboard",
+    },
+  },
+  {
+    title: "Resume AI Analyzer",
+    description:
+      "Dual-mode AI platform helping candidates optimize resumes against job descriptions and recruiters evaluate candidate fit instantly. Integrates PDF parsing with AI analysis for actionable feedback on resume-to-JD alignment.",
+    tags: ["Python", "Gemini API", "React"],
+    links: {
+      demo: "https://ai-resume-analyzer-omega-lime.vercel.app/",
+      github: "https://github.com/Aryamannn/resume-ai-analyzer",
+    },
+  },
+];
+
+// ─────────────────────────────────────────────
+// REUSABLE PRIMITIVES
+// ─────────────────────────────────────────────
+
+const GradientText = ({ children, className = "" }) => (
+  <span
+    className={`bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent ${className}`}
+  >
+    {children}
+  </span>
+);
+
+const GlassCard = ({ children, className = "" }) => (
+  <div
+    className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-violet-500/30 hover:bg-white/[0.07] transition-all duration-300 ${className}`}
+  >
+    {children}
+  </div>
+);
+
+const SectionHeading = ({ title, subtitle }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6, delay }}
-  >
-    {children}
-  </motion.div>
-);
-
-const MotionCard = ({ children, index = 0 }) => (
-  <motion.div
-    variants={scaleUp}
-    initial="initial"
-    whileInView="animate"
-    whileHover="hover"
+    whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
-    custom={index}
+    transition={{ duration: 0.6 }}
+    className="text-center mb-16"
   >
-    {children}
+    <h2 className="text-4xl md:text-5xl font-bold mb-4">
+      <GradientText>{title}</GradientText>
+    </h2>
+    {subtitle && (
+      <p className="text-gray-400 max-w-xl mx-auto mt-3 text-sm md:text-base">
+        {subtitle}
+      </p>
+    )}
+    <div className="mt-5 h-1 w-20 mx-auto bg-gradient-to-r from-violet-500 to-pink-500 rounded-full" />
   </motion.div>
 );
 
-const MotionSection = ({ children }) => (
-  <motion.div
-    variants={staggerContainer}
-    initial="initial"
-    whileInView="animate"
-    viewport={{ once: true, margin: "-100px" }}
-  >
-    {children}
-  </motion.div>
-);
-
-// Reusable Components
-const Section = ({ id, title, children, bgColor = "bg-gray-900/30" }) => (
-  <MotionSection>
-    <section id={id} className={`py-8 ${bgColor} backdrop-blur-sm`}>
-      <div className="max-w-4xl mx-auto px-4">
-        <MotionHeading>
-          <h2 className="text-3xl font-bold text-center mb-8 text-white">{title}</h2>
-        </MotionHeading>
-        {children}
-      </div>
-    </section>
-  </MotionSection>
-);
-
-const Card = ({ children, className = "", index = 0 }) => (
-  <MotionCard index={index}>
-    <div className={`bg-gray-900/60 backdrop-blur-sm p-6 rounded-lg shadow-lg hover:shadow-xl hover:shadow-blue-500/10 transition-all border border-gray-700 hover:border-blue-500/30 ${className}`}>
-      {children}
-    </div>
-  </MotionCard>
-);
-
-// Navigation Component
-const Navigation = ({ isMenuOpen, setIsMenuOpen }) => {
-  const navLinks = [
-    { href: "#home", text: "Home" },
-    { href: "#education", text: "Education" },
-    { href: "#skills", text: "Skills" },
-    { href: "#experience", text: "Experience" },
-    { href: "#projects", text: "Projects" },
-    { href: "#contact", text: "Contact" }
-  ];
+const SkillBar = ({ name, level, delay = 0 }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <nav className="bg-black/90 backdrop-blur-md shadow-lg fixed w-full z-10 border-b border-gray-800">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-center items-center h-16 relative">
-          {/* Name on the left */}
-          <a href="#home" className="absolute left-0 text-xl font-bold text-white">
-            Aryaman Mishra
+    <div ref={ref} className="mb-5">
+      <div className="flex justify-between mb-2 text-sm">
+        <span className="text-gray-300 font-medium">{name}</span>
+        <span className="text-violet-400 font-semibold">{level}%</span>
+      </div>
+      <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={isInView ? { width: `${level}%` } : {}}
+          transition={{ duration: 1.2, ease: "easeOut", delay }}
+          className="h-full bg-gradient-to-r from-violet-500 to-pink-500 rounded-full"
+          style={{ boxShadow: "0 0 8px rgba(124, 58, 237, 0.5)" }}
+        />
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+
+const navLinks = [
+  { href: "#home", text: "Home" },
+  { href: "#education", text: "Education" },
+  { href: "#skills", text: "Skills" },
+  { href: "#experience", text: "Experience" },
+  { href: "#projects", text: "Projects" },
+  { href: "#contact", text: "Contact" },
+];
+
+const Navigation = ({ isMenuOpen, setIsMenuOpen }) => (
+  <motion.nav
+    initial={{ y: -100 }}
+    animate={{ y: 0 }}
+    transition={{ duration: 0.6 }}
+    className="fixed w-full z-50 top-0"
+  >
+    <div className="bg-[#030014]/80 backdrop-blur-xl border-b border-white/5">
+      <div className="max-w-6xl mx-auto px-4 md:px-8">
+        <div className="flex justify-between items-center h-16">
+          <a href="#home" className="text-xl font-bold">
+            <GradientText>Aryaman Mishra</GradientText>
           </a>
-          
-          {/* Centered navigation links */}
-          <div className="hidden md:flex space-x-8">
-            {navLinks.map(link => (
-              <a 
-                key={link.href} 
-                href={link.href} 
-                className="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-800/50"
+
+          <div className="hidden md:flex items-center space-x-1">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-gray-400 hover:text-white px-4 py-2 rounded-lg hover:bg-white/5 transition-all text-sm font-medium"
               >
                 {link.text}
               </a>
             ))}
           </div>
-          
-          {/* Mobile menu button on the right */}
-          <button 
-            className="md:hidden absolute right-0 text-gray-300 hover:text-white"
+
+          <button
+            className="md:hidden text-gray-400 hover:text-white p-2 rounded-lg hover:bg-white/5 transition-all"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <span className="text-2xl">☰</span>
+            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
-        
-        {isMenuOpen && (
-          <div className="md:hidden pb-4">
-            {navLinks.map(link => (
-              <a 
+      </div>
+    </div>
+
+    <AnimatePresence>
+      {isMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          className="md:hidden bg-[#030014]/95 backdrop-blur-xl border-b border-white/5"
+        >
+          <div className="px-4 py-3 space-y-1">
+            {navLinks.map((link) => (
+              <a
                 key={link.href}
-                href={link.href} 
-                className="block py-2 px-4 text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-md transition-colors"
+                href={link.href}
                 onClick={() => setIsMenuOpen(false)}
+                className="block text-gray-400 hover:text-white px-4 py-3 rounded-lg hover:bg-white/5 transition-all"
               >
                 {link.text}
               </a>
             ))}
           </div>
-        )}
-      </div>
-    </nav>
-  );
-};
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </motion.nav>
+);
 
-// Skills Component
-const Skills = () => {
-  const skillsData = [
-    {
-      category: "Languages",
-      skills: ["Python", "JavaScript", "TypeScript", "SQL", "Java", "C++"]
-    },
-    {
-      category: "AI & Data",
-      skills: ["Gemini API", "LLM Integration", "Power BI", "ETL Pipelines", "Data Modeling"]
-    },
-    {
-      category: "Tools & Frameworks",
-      skills: ["React", "FastAPI", "Node.js", "PostgreSQL", "Supabase", "Git", "Docker", "AWS"]
-    }
-  ];
+// ─────────────────────────────────────────────
+// HERO
+// ─────────────────────────────────────────────
 
-  return (
-    <Section id="skills" title="Skills" bgColor="bg-gray-800/20">
-      <motion.div
-        variants={staggerContainer}
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto"
-      >
-        {skillsData.map((category, index) => (
-          <Card key={index} index={index}>
-            <motion.h3 
-              variants={fadeInUp}
-              className="text-xl font-semibold mb-4 text-white"
+const Hero = () => (
+  <section
+    id="home"
+    className="min-h-screen flex items-center pt-16 relative overflow-hidden"
+  >
+    {/* Background blobs */}
+    <div className="absolute top-1/4 left-1/6 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl animate-float pointer-events-none" />
+    <div className="absolute bottom-1/3 right-1/4 w-60 h-60 bg-pink-600/10 rounded-full blur-3xl animate-float-delayed pointer-events-none" />
+    <div className="absolute top-2/3 left-1/2 w-40 h-40 bg-cyan-600/8 rounded-full blur-3xl animate-float-slow pointer-events-none" />
+
+    <div className="max-w-6xl mx-auto px-4 md:px-8 w-full py-20">
+      <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
+        {/* Text */}
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="flex-1 text-center md:text-left"
+        >
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-violet-400 font-medium mb-3 tracking-widest text-sm uppercase"
+          >
+            Welcome to my portfolio
+          </motion.p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.8 }}
+            className="text-5xl md:text-7xl font-bold mb-5 leading-tight"
+          >
+            Hi, I&apos;m
+            <br />
+            <GradientText>Aryaman Mishra</GradientText>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="text-lg text-gray-400 mb-8 max-w-lg"
+          >
+            Software Engineer &nbsp;·&nbsp; Full Stack Developer &nbsp;·&nbsp;
+            AI/Data Solutions
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65 }}
+            className="flex flex-wrap gap-4 justify-center md:justify-start mb-10"
+          >
+            <a
+              href="#projects"
+              className="px-8 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-pink-600 text-white font-semibold hover:opacity-90 hover:scale-105 transition-all shadow-lg shadow-violet-500/25"
             >
-              {category.category}
-            </motion.h3>
-            <motion.ul 
-              variants={staggerContainer}
-              className="space-y-2"
+              View Projects
+            </a>
+            <a
+              href="#contact"
+              className="px-8 py-3 rounded-xl border border-white/10 text-gray-300 font-semibold hover:border-violet-500/50 hover:text-white hover:bg-white/5 transition-all"
             >
-              {category.skills.map((skill, skillIndex) => (
-                <motion.li
-                  key={skillIndex}
-                  variants={fadeInUp}
-                  className="text-gray-300"
-                >
-                  {skill}
-                </motion.li>
-              ))}
-            </motion.ul>
-          </Card>
-        ))}
-      </motion.div>
-    </Section>
-  );
-};
+              Contact Me
+            </a>
+          </motion.div>
 
-// Education Component
-const Education = () => {
-  const educationData = [
-    {
-      school: "California State University, Monterey Bay",
-      degree: "Bachelor of Science in Computer Science",
-      date: "Dec. 2024",
-      location: "California, USA",
-      coursework: "Data Structures, Algorithms, Databases, Computer Systems, Machine Learning"
-    },
-    {
-      school: "Vidyalankar Institute for International Education",
-      degree: "B.Tech in Computer Engineering",
-      date: "Aug. 2023",
-      location: "Mumbai, India"
-    }
-  ];
-
-  return (
-    <Section id="education" title="Education" bgColor="bg-gray-900/30">
-      <div className="grid gap-8 max-w-2xl mx-auto">
-        {educationData.map((edu, index) => (
-          <Card key={index}>
-            <h3 className="font-bold text-lg text-white">{edu.school}</h3>
-            <p className="text-gray-300 font-medium">{edu.degree}</p>
-            <p className="text-gray-400">{edu.date}{edu.location ? ` · ${edu.location}` : ""}</p>
-            {edu.coursework && <p className="text-gray-500 text-sm mt-1">Coursework: {edu.coursework}</p>}
-          </Card>
-        ))}
-      </div>
-    </Section>
-  );
-};
-
-// Experience Component
-const Experience = () => {
-  const experienceData = [
-    {
-      title: "POS-IT Admin",
-      company: "Compass Group",
-      duration: "Jan. 2025 – Present",
-      location: "California, USA",
-      achievements: [
-        "Built automated sales reporting pipeline using SQL and Power BI, replacing manual Excel workflows and reducing reporting time by 60%",
-        "Designed real-time inventory dashboards that identified cost-saving opportunities across retail locations",
-        "Troubleshot and resolved POS system issues across multiple campus locations, maintaining 99%+ uptime during peak service hours",
-        "Consolidated data from ServiceNow, POS, and inventory systems to streamline event planning and financial reporting for marketing and finance teams"
-      ]
-    },
-    {
-      title: "Front End Development Intern",
-      company: "Morfeed",
-      duration: "Feb. 2023 – May 2023",
-      location: "Mumbai, India",
-      achievements: [
-        "Refactored front-end components to fix rendering bugs, improving page load times by 30%",
-        "Collaborated with backend team to integrate APIs, reducing data fetch errors and improving user experience"
-      ]
-    }
-  ];
-
-  return (
-    <Section id="experience" title="Experience" bgColor="bg-gray-900/30">
-      <div className="grid gap-8 max-w-2xl mx-auto">
-        {experienceData.map((exp, index) => (
-          <Card key={index}>
-            <h3 className="font-bold text-lg text-white">{exp.title}</h3>
-            <p className="text-gray-300 font-medium">{exp.company}</p>
-            <p className="text-gray-400 mb-4">{exp.duration}{exp.location ? ` · ${exp.location}` : ""}</p>
-            <ul className="list-disc list-inside text-gray-400 space-y-2">
-              {exp.achievements.map((achievement, idx) => (
-                <li key={idx}>{achievement}</li>
-              ))}
-            </ul>
-          </Card>
-        ))}
-      </div>
-    </Section>
-  );
-};
-
-// Projects Component
-const Projects = () => {
-  const projectsData = [
-    {
-      title: "DocMiddleware",
-      description: "AI-powered document processing platform that extracts invoice data using Gemini API, achieving 100% confidence on 141 documents with 4.9s average latency. Features custom schema builder allowing users to define extraction fields without code, plus human-in-the-loop review workflow with status tracking.",
-      tags: ["Supabase", "Gemini API", "React"],
-      links: {
-        demo: "https://gina-two.vercel.app/dashboard",
-        github: "https://github.com/Aryamannn/docmiddleware"
-      }
-    },
-    {
-      title: "AI Chatbot Dashboard",
-      description: "Multi-tenant AI assistant platform that transforms knowledge bases into customer-facing chatbots with no training required. Features one-click embed system for deployment on any website with a single line of code. Implements zero-trust architecture ensuring user data is never stored or used for model training.",
-      tags: ["FastAPI", "Supabase", "Gemini API", "React"],
-      links: {
-        demo: "https://ai-chatbot-beta-six-30.vercel.app/#features",
-        github: "https://github.com/Aryamannn/ai-chatbot-dashboard"
-      }
-    },
-    {
-      title: "Resume AI Analyzer",
-      description: "Dual-mode AI platform helping candidates optimize resumes against job descriptions and recruiters evaluate candidate fit instantly. Integrates PDF parsing with AI analysis to provide actionable feedback on resume-to-JD alignment.",
-      tags: ["Python", "Gemini API", "React"],
-      links: {
-        demo: "https://ai-resume-analyzer-omega-lime.vercel.app/",
-        github: "https://github.com/Aryamannn/resume-ai-analyzer"
-      }
-    }
-  ];
-
-  return (
-    <Section id="projects" title="Projects" bgColor="bg-gray-800/20">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> 
-        {projectsData.map((project, index) => (
-          <Card key={index}>
-            <h3 className="font-bold text-lg mb-2 text-white">{project.title}</h3>
-            <p className="text-gray-300 mb-4">{project.description}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {project.tags.map((tag, tagIndex) => (
-                <span key={tagIndex} className="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-sm border border-blue-500/20">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <div className="flex gap-4">
-              {project.links.demo && (
-                <a
-                  href={project.links.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-white hover:underline transition-colors"
-                >
-                  Demo
-                </a>
-              )}
-              <a
-                href={project.links.github}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.85 }}
+            className="flex gap-4 justify-center md:justify-start"
+          >
+            {[
+              { href: "https://github.com/Aryamannn", icon: Github, label: "GitHub" },
+              { href: "https://www.linkedin.com/in/aryamanmishra/", icon: Linkedin, label: "LinkedIn" },
+              { href: "mailto:aryaman.mmishra@gmail.com", icon: Mail, label: "Email" },
+            ].map((s, i) => (
+              <motion.a
+                key={i}
+                href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-400 hover:text-white hover:underline transition-colors"
+                whileHover={{ scale: 1.1, y: -3 }}
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
               >
-                GitHub
-              </a>
+                <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 group-hover:border-violet-500/40 group-hover:bg-violet-500/10 transition-all">
+                  <s.icon className="w-4 h-4" />
+                </div>
+                <span className="text-sm hidden sm:block">{s.label}</span>
+              </motion.a>
+            ))}
+          </motion.div>
+        </motion.div>
+
+        {/* Profile image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.2 }}
+          className="relative flex-shrink-0"
+        >
+          <div className="relative w-60 h-72 md:w-80 md:h-96">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-600/40 to-pink-600/40 blur-2xl" />
+            <div className="relative w-full h-full rounded-2xl overflow-hidden border border-violet-500/30">
+              <Image
+                src="/profile.jpg"
+                alt="Aryaman Mishra"
+                width={320}
+                height={384}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#030014]/50 via-transparent to-transparent" />
             </div>
-          </Card>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+        className="flex flex-col items-center gap-1 text-gray-600 mt-16"
+      >
+        <span className="text-xs tracking-widest uppercase">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
+          <ChevronDown className="w-4 h-4" />
+        </motion.div>
+      </motion.div>
+    </div>
+  </section>
+);
+
+// ─────────────────────────────────────────────
+// EDUCATION
+// ─────────────────────────────────────────────
+
+const Education = () => (
+  <section id="education" className="py-24 relative">
+    <div className="max-w-5xl mx-auto px-4 md:px-8">
+      <SectionHeading
+        title="Education"
+        subtitle="My academic journey across two continents"
+      />
+      <div className="grid gap-6 max-w-3xl mx-auto">
+        {educationData.map((edu, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.15 }}
+          >
+            <GlassCard className="p-6 border-l-2 border-l-violet-500/60">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <GraduationCap className="w-4 h-4 text-violet-400 flex-shrink-0" />
+                    <h3 className="text-white font-bold text-lg leading-tight">
+                      {edu.school}
+                    </h3>
+                  </div>
+                  <p className="text-violet-300 font-medium ml-6">{edu.degree}</p>
+                </div>
+                <div className="flex flex-col items-start sm:items-end gap-1 ml-6 sm:ml-0 flex-shrink-0">
+                  <span className="text-gray-400 text-sm flex items-center gap-1">
+                    <Calendar className="w-3 h-3" />
+                    {edu.date}
+                  </span>
+                  <span className="text-gray-500 text-sm flex items-center gap-1">
+                    <MapPin className="w-3 h-3" />
+                    {edu.location}
+                  </span>
+                </div>
+              </div>
+              {edu.coursework && (
+                <p className="text-gray-500 text-sm ml-6 border-t border-white/5 pt-3 mt-2">
+                  <span className="text-gray-400">Coursework: </span>
+                  {edu.coursework}
+                </p>
+              )}
+            </GlassCard>
+          </motion.div>
         ))}
       </div>
-    </Section>
-  );
-};
+    </div>
+  </section>
+);
 
-// Main Portfolio Component
-const Portfolio = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+// ─────────────────────────────────────────────
+// SKILLS
+// ─────────────────────────────────────────────
 
-  const handleSubmit = async (e) => {
+const Skills = () => (
+  <section id="skills" className="py-24 relative">
+    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet-950/5 to-transparent pointer-events-none" />
+    <div className="max-w-6xl mx-auto px-4 md:px-8">
+      <SectionHeading title="Skills" subtitle="Technologies and tools I work with" />
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+        {skillsData.map((cat, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.15 }}
+          >
+            <GlassCard className="p-6 h-full">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2.5 rounded-xl bg-violet-500/20 border border-violet-500/20">
+                  <cat.icon className="w-5 h-5 text-violet-400" />
+                </div>
+                <h3 className="text-white font-bold text-lg">{cat.category}</h3>
+              </div>
+              {cat.skills.map((skill, j) => (
+                <SkillBar
+                  key={j}
+                  name={skill.name}
+                  level={skill.level}
+                  delay={j * 0.1}
+                />
+              ))}
+            </GlassCard>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Tech badge grid */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="flex flex-wrap justify-center gap-3"
+      >
+        {techBadges.map((tech, i) => (
+          <motion.span
+            key={i}
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.04 }}
+            whileHover={{ scale: 1.08, y: -2 }}
+            className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-gray-300 hover:border-violet-500/40 hover:text-white hover:bg-violet-500/10 transition-all cursor-default"
+          >
+            {tech}
+          </motion.span>
+        ))}
+      </motion.div>
+    </div>
+  </section>
+);
+
+// ─────────────────────────────────────────────
+// EXPERIENCE
+// ─────────────────────────────────────────────
+
+const Experience = () => (
+  <section id="experience" className="py-24">
+    <div className="max-w-4xl mx-auto px-4 md:px-8">
+      <SectionHeading title="Experience" subtitle="Where I've made an impact" />
+      <div className="space-y-6">
+        {experienceData.map((exp, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.15 }}
+          >
+            <GlassCard className="p-6 border-l-2 border-l-pink-500/60">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                <div className="flex items-start gap-2">
+                  <Briefcase className="w-4 h-4 text-pink-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="text-white font-bold text-lg leading-tight">
+                      {exp.title}
+                    </h3>
+                    <p className="text-pink-300 font-medium">{exp.company}</p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-start sm:items-end gap-1 ml-6 sm:ml-0 flex-shrink-0">
+                  <span className="text-gray-400 text-sm flex items-center gap-1">
+                    <Calendar className="w-3 h-3" />
+                    {exp.duration}
+                  </span>
+                  <span className="text-gray-500 text-sm flex items-center gap-1">
+                    <MapPin className="w-3 h-3" />
+                    {exp.location}
+                  </span>
+                </div>
+              </div>
+              <ul className="space-y-2.5 ml-6">
+                {exp.achievements.map((a, j) => (
+                  <li key={j} className="text-gray-400 text-sm flex items-start gap-2.5">
+                    <span className="mt-2 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-violet-400 inline-block" />
+                    {a}
+                  </li>
+                ))}
+              </ul>
+            </GlassCard>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+// ────────────────────────────────────────��────
+// PROJECTS
+// ─────────────────────────────────────────────
+
+const Projects = () => (
+  <section id="projects" className="py-24 relative">
+    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-pink-950/5 to-transparent pointer-events-none" />
+    <div className="max-w-6xl mx-auto px-4 md:px-8">
+      <SectionHeading title="Projects" subtitle="Things I've built" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projectsData.map((project, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.15 }}
+            whileHover={{ y: -6 }}
+            className="h-full"
+          >
+            <GlassCard className="p-0 overflow-hidden h-full flex flex-col">
+              {/* Gradient top bar */}
+              <div className="h-1 w-full bg-gradient-to-r from-violet-500 to-pink-500" />
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-white font-bold text-xl mb-3">
+                  {project.title}
+                </h3>
+                <p className="text-gray-400 text-sm leading-relaxed mb-5 flex-1">
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-5">
+                  {project.tags.map((tag, j) => (
+                    <span
+                      key={j}
+                      className="px-3 py-1 bg-violet-500/10 border border-violet-500/20 text-violet-300 rounded-full text-xs font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-4 pt-4 border-t border-white/5">
+                  {project.links.demo && (
+                    <a
+                      href={project.links.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-sm text-gray-300 hover:text-white transition-colors group"
+                    >
+                      <ExternalLink className="w-4 h-4 text-violet-400 group-hover:text-violet-300" />
+                      Live Demo
+                    </a>
+                  )}
+                  <a
+                    href={project.links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-sm text-gray-300 hover:text-white transition-colors group"
+                  >
+                    <Github className="w-4 h-4 text-gray-400 group-hover:text-white" />
+                    GitHub
+                  </a>
+                </div>
+              </div>
+            </GlassCard>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+// ─────────────────────────────────────────────
+// CONTACT
+// ─────────────────────────────────────────────
+
+const Contact = () => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    
-    console.log({
-      name: formData.get('name'),
-      email: formData.get('email'),
-      message: formData.get('message'),
-    });
-    
     e.currentTarget.reset();
-    alert('Message sent! (This is a demo alert)');
+    alert("Message sent!");
   };
 
   return (
-    <div className="min-h-screen text-gray-300 relative">
-      <div className="fixed inset-0 bg-black"></div>
-      <div className="fixed inset-0 bg-grid opacity-10"></div>
-      
-      <div className="relative">
-        <Navigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-        
-        <section id="home" className="pt-24 pb-8 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-gray-900/20 via-transparent to-transparent"></div>
-          
-          <div className="relative max-w-4xl mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center justify-center md:justify-between min-h-[70vh]">
-              <motion.div
-                variants={fadeInUp}
-                initial="initial"
-                animate="animate"
-                className="text-center md:text-left md:flex-1"
-              >
-                <motion.h1 
-                  variants={fadeInUp}
-                  className="text-4xl md:text-6xl font-bold mb-6"
-                >
-                  Hi, I&apos;m <span className="text-white">Aryaman Mishra</span>
-                </motion.h1>
-                <motion.p 
-                  variants={fadeInUp}
-                  className="text-xl text-gray-400 mb-8 max-w-2xl"
-                >
-                  Software Engineer | Full Stack Developer | AI/Data Solutions
-                </motion.p>
-                
-                <motion.div
-                  variants={staggerContainer}
-                  initial="initial"
-                  animate="animate"
-                  className="flex flex-wrap justify-center md:justify-start gap-6"
-                >
-                  {[
-                    { href: "https://github.com/Aryamannn", icon: Github, label: "GitHub" },
-                    { href: "https://www.linkedin.com/in/aryamanmishra/", icon: Linkedin, label: "LinkedIn" },
-                    { href: "mailto:aryaman.mmishra@gmail.com", icon: Mail, label: "Email" }
-                  ].map((social, index) => (
-                    <motion.a
-                      key={index}
-                      variants={socialIconAnimation}
-                      whileHover="hover"
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-                    >
-                      <social.icon className="w-5 h-5" />
-                      {social.label}
-                    </motion.a>
-                  ))}
-                </motion.div>
-              </motion.div>
-              
-              {/* Profile Image next to content */}
-              <motion.div
-                variants={profileImageAnimation}
-                initial="initial"
-                animate="animate"
-                whileHover="hover"
-                className="mt-8 md:mt-0 md:ml-8 w-64 h-80 rounded-2xl overflow-hidden shadow-xl border-4 border-blue-500/30 bg-gradient-to-br from-blue-500/10 to-gray-900/20"
-              >
-                <Image 
-                  src={'/profile.jpg'}
-                  alt="Aryaman Mishra"
-                  width={256}
-                  height={320}
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        <Education />
-        <Skills />
-        <Experience />
-        <Projects />
-        
-        <Section id="contact" title="Contact Me" bgColor="bg-gray-900/50">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-gray-800/60 backdrop-blur-sm p-8 rounded-lg border border-gray-700">
-                <h3 className="text-xl font-bold text-white mb-6">Contact Information</h3>
-                <div className="space-y-4">
-                  {[
-                    { icon: Mail, href: "mailto:aryaman.mmishra@gmail.com", text: "aryaman.mmishra@gmail.com" },
-                    { icon: Phone, href: "tel:+18317180852", text: "+1 (831) 718 0852" },
-                    { icon: Github, href: "https://github.com/Aryamannn", text: "github.com/Aryamannn" },
-                    { icon: Linkedin, href: "https://www.linkedin.com/in/aryamanmishra/", text: "linkedin.com/in/aryamanmishra" }
-                  ].map((contact, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <contact.icon className="h-5 w-5 text-blue-400" />
-                      <a 
-                        href={contact.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-300 hover:text-white transition-colors">
-                        {contact.text}
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Send Message Card */}
-              <div className="bg-gray-800/60 backdrop-blur-sm p-8 rounded-lg border border-gray-700">
-                <h3 className="text-xl font-bold text-white mb-6">Send a Message</h3>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  {[
-                    { id: "name", type: "text", label: "Name" },
-                    { id: "email", type: "email", label: "Email" }
-                  ].map((field) => (
-                    <div key={field.id}>
-                      <label htmlFor={field.id} className="block text-sm font-medium text-gray-300 mb-1">
-                        {field.label}
-                      </label>
-                      <input
-                        type={field.type}
-                        id={field.id}
-                        name={field.id}
-                        className="w-full px-3 py-2 bg-gray-900/60 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-300 transition-all"
-                        required
-                      />
-                    </div>
-                  ))}
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={4}
-                      className="w-full px-3 py-2 bg-gray-900/60 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-300 transition-all"
-                      required
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 font-medium shadow-lg hover:shadow-blue-500/25"
-                  >
-                    Send Message
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </Section>
-
-        {/* Footer */}
-        <footer className="relative bg-gradient-to-b from-gray-900 to-black py-8 border-t border-gray-800">
-          <div className="max-w-4xl mx-auto px-4">
-            <div className="text-center space-y-4">
-              <div className="flex justify-center space-x-6 mb-4">
+    <section id="contact" className="py-24">
+      <div className="max-w-5xl mx-auto px-4 md:px-8">
+        <SectionHeading
+          title="Contact Me"
+          subtitle="Let's build something great together"
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Info card */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <GlassCard className="p-8 h-full">
+              <h3 className="text-xl font-bold text-white mb-8">Get In Touch</h3>
+              <div className="space-y-6">
                 {[
-                  { href: "https://github.com/Aryamannn", icon: Github },
-                  { href: "https://www.linkedin.com/in/aryamanmishra/", icon: Linkedin },
-                  { href: "mailto:aryaman.mmishra@gmail.com", icon: Mail }
-                ].map((social, index) => (
-                  <a 
-                    key={index}
-                    href={social.href} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="text-gray-400 hover:text-white transition-colors"
+                  {
+                    icon: Mail,
+                    label: "Email",
+                    text: "aryaman.mmishra@gmail.com",
+                    href: "mailto:aryaman.mmishra@gmail.com",
+                  },
+                  {
+                    icon: Phone,
+                    label: "Phone",
+                    text: "+1 (831) 718 0852",
+                    href: "tel:+18317180852",
+                  },
+                  {
+                    icon: Github,
+                    label: "GitHub",
+                    text: "github.com/Aryamannn",
+                    href: "https://github.com/Aryamannn",
+                  },
+                  {
+                    icon: Linkedin,
+                    label: "LinkedIn",
+                    text: "linkedin.com/in/aryamanmishra",
+                    href: "https://www.linkedin.com/in/aryamanmishra/",
+                  },
+                ].map((c, i) => (
+                  <motion.a
+                    key={i}
+                    href={c.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ x: 4 }}
+                    className="flex items-center gap-4 group"
                   >
-                    <social.icon className="w-6 h-6" />
-                  </a>
+                    <div className="p-2.5 rounded-xl bg-violet-500/10 border border-violet-500/20 group-hover:bg-violet-500/20 transition-all">
+                      <c.icon className="w-4 h-4 text-violet-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 mb-0.5">{c.label}</p>
+                      <p className="text-gray-300 text-sm group-hover:text-white transition-colors">
+                        {c.text}
+                      </p>
+                    </div>
+                  </motion.a>
                 ))}
               </div>
-              <p className="text-gray-400">© {new Date().getFullYear()} Aryaman Mishra. All rights reserved.</p>
-            </div>
-          </div>
-        </footer>
+            </GlassCard>
+          </motion.div>
+
+          {/* Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <GlassCard className="p-8">
+              <h3 className="text-xl font-bold text-white mb-8">Send a Message</h3>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {[
+                  { id: "name", type: "text", label: "Name" },
+                  { id: "email", type: "email", label: "Email" },
+                ].map((field) => (
+                  <div key={field.id}>
+                    <label className="block text-sm text-gray-400 mb-1.5">
+                      {field.label}
+                    </label>
+                    <input
+                      type={field.type}
+                      name={field.id}
+                      required
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-gray-300 placeholder-gray-600 focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.07] transition-all text-sm"
+                    />
+                  </div>
+                ))}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1.5">
+                    Message
+                  </label>
+                  <textarea
+                    name="message"
+                    rows={4}
+                    required
+                    className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-gray-300 placeholder-gray-600 focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.07] transition-all resize-none text-sm"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-gradient-to-r from-violet-600 to-pink-600 text-white font-semibold rounded-xl hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-violet-500/20"
+                >
+                  Send Message
+                </button>
+              </form>
+            </GlassCard>
+          </motion.div>
+        </div>
       </div>
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────
+// FOOTER
+// ─────────────────────────────────────────────
+
+const Footer = () => (
+  <footer className="border-t border-white/5 py-8">
+    <div className="max-w-6xl mx-auto px-4 md:px-8">
+      <div className="flex flex-col items-center gap-4">
+        <div className="flex gap-3">
+          {[
+            { href: "https://github.com/Aryamannn", icon: Github },
+            { href: "https://www.linkedin.com/in/aryamanmishra/", icon: Linkedin },
+            { href: "mailto:aryaman.mmishra@gmail.com", icon: Mail },
+          ].map((s, i) => (
+            <motion.a
+              key={i}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.15, y: -2 }}
+              className="p-2.5 rounded-xl text-gray-500 hover:text-white hover:bg-white/5 transition-all"
+            >
+              <s.icon className="w-5 h-5" />
+            </motion.a>
+          ))}
+        </div>
+        <p className="text-gray-600 text-sm">
+          © {new Date().getFullYear()}{" "}
+          <GradientText>Aryaman Mishra</GradientText>. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+);
+
+// ─────────────────────────────────────────────
+// MAIN
+// ─────────────────────────────────────────────
+
+const Portfolio = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-[#030014] text-gray-300">
+      <Navigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      <Hero />
+      <Education />
+      <Skills />
+      <Experience />
+      <Projects />
+      <Contact />
+      <Footer />
     </div>
   );
 };
