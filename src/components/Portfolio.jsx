@@ -357,7 +357,7 @@ const Projects = () => {
       description: "Multi-tenant AI assistant platform that transforms knowledge bases into customer-facing chatbots with no training required. Features one-click embed system for deployment on any website with a single line of code. Implements zero-trust architecture ensuring user data is never stored or used for model training.",
       tags: ["FastAPI", "Supabase", "Gemini API", "React"],
       links: {
-        demo: null,
+        demo: "https://ai-chatbot-beta-six-30.vercel.app/#features",
         github: "https://github.com/Aryamannn/ai-chatbot-dashboard"
       }
     },
@@ -366,7 +366,7 @@ const Projects = () => {
       description: "Dual-mode AI platform helping candidates optimize resumes against job descriptions and recruiters evaluate candidate fit instantly. Integrates PDF parsing with AI analysis to provide actionable feedback on resume-to-JD alignment.",
       tags: ["Python", "Gemini API", "React"],
       links: {
-        demo: null,
+        demo: "https://ai-resume-analyzer-omega-lime.vercel.app/",
         github: "https://github.com/Aryamannn/resume-ai-analyzer"
       }
     }
