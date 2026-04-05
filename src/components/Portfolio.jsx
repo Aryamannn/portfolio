@@ -208,16 +208,16 @@ const Navigation = ({ isMenuOpen, setIsMenuOpen }) => {
 const Skills = () => {
   const skillsData = [
     {
-      category: "Frontend",
-      skills: ["React.js", "Next.js", "TypeScript", "Tailwind CSS"]
+      category: "Languages",
+      skills: ["Python", "JavaScript", "TypeScript", "SQL", "Java", "C++"]
     },
     {
-      category: "Backend",
-      skills: ["Node.js", "Express", "MongoDB", "SQL"]
+      category: "AI & Data",
+      skills: ["Gemini API", "LLM Integration", "Power BI", "ETL Pipelines", "Data Modeling"]
     },
     {
-      category: "Tools & Technologies",
-      skills: ["Git", "Docker", "AWS", "CI/CD"]
+      category: "Tools & Frameworks",
+      skills: ["React", "FastAPI", "Node.js", "PostgreSQL", "Supabase", "Git", "Docker", "AWS"]
     }
   ];
 
@@ -263,22 +263,17 @@ const Skills = () => {
 const Education = () => {
   const educationData = [
     {
-      school: "California State University at Monterey Bay",
-      degree: "BS in Computer Science",
-      date: "Expected May 2025",
-      gpa: "3.6/4.0"
+      school: "California State University, Monterey Bay",
+      degree: "Bachelor of Science in Computer Science",
+      date: "Dec. 2024",
+      location: "California, USA",
+      coursework: "Data Structures, Algorithms, Databases, Computer Systems, Machine Learning"
     },
     {
       school: "Vidyalankar Institute for International Education",
       degree: "B.Tech in Computer Engineering",
-      date: "August 2023",
-      gpa: "10/10"
-    },
-    {
-      school: "Thakur Polytechnic",
-      degree: "Diploma in Computer Science",
-      date: "May 2022",
-      gpa: "10/10"
+      date: "Aug. 2023",
+      location: "Mumbai, India"
     }
   ];
 
@@ -289,8 +284,8 @@ const Education = () => {
           <Card key={index}>
             <h3 className="font-bold text-lg text-white">{edu.school}</h3>
             <p className="text-gray-300 font-medium">{edu.degree}</p>
-            <p className="text-gray-400">{edu.date}</p>
-            <p className="text-gray-400">GPA: {edu.gpa}</p>
+            <p className="text-gray-400">{edu.date}{edu.location ? ` · ${edu.location}` : ""}</p>
+            {edu.coursework && <p className="text-gray-500 text-sm mt-1">Coursework: {edu.coursework}</p>}
           </Card>
         ))}
       </div>
@@ -302,23 +297,25 @@ const Education = () => {
 const Experience = () => {
   const experienceData = [
     {
-      title: "Front End Development Intern",
-      company: "Morfeed",
-      duration: "February 2023 - May 2023",
+      title: "POS-IT Admin",
+      company: "Compass Group",
+      duration: "Jan. 2025 – Present",
+      location: "California, USA",
       achievements: [
-        "Improved user experience by developing responsive interfaces",
-        "Collaborated with cross-functional teams",
-        "Conducted code reviews and optimizations"
+        "Built automated sales reporting pipeline using SQL and Power BI, replacing manual Excel workflows and reducing reporting time by 60%",
+        "Designed real-time inventory dashboards that identified cost-saving opportunities across retail locations",
+        "Troubleshot and resolved POS system issues across multiple campus locations, maintaining 99%+ uptime during peak service hours",
+        "Consolidated data from ServiceNow, POS, and inventory systems to streamline event planning and financial reporting for marketing and finance teams"
       ]
     },
     {
-      title: "Mobile Application Development",
-      company: "Rely Service",
-      duration: "March 2021 - July 2021",
+      title: "Front End Development Intern",
+      company: "Morfeed",
+      duration: "Feb. 2023 – May 2023",
+      location: "Mumbai, India",
       achievements: [
-        "Developed versatile listing platform for houses and services",
-        "Created intuitive user interface with dynamic features",
-        "Gained experience in UI/UX design and database management"
+        "Refactored front-end components to fix rendering bugs, improving page load times by 30%",
+        "Collaborated with backend team to integrate APIs, reducing data fetch errors and improving user experience"
       ]
     }
   ];
@@ -330,7 +327,7 @@ const Experience = () => {
           <Card key={index}>
             <h3 className="font-bold text-lg text-white">{exp.title}</h3>
             <p className="text-gray-300 font-medium">{exp.company}</p>
-            <p className="text-gray-400 mb-4">{exp.duration}</p>
+            <p className="text-gray-400 mb-4">{exp.duration}{exp.location ? ` · ${exp.location}` : ""}</p>
             <ul className="list-disc list-inside text-gray-400 space-y-2">
               {exp.achievements.map((achievement, idx) => (
                 <li key={idx}>{achievement}</li>
@@ -347,30 +344,30 @@ const Experience = () => {
 const Projects = () => {
   const projectsData = [
     {
-      title: "PawsConnect",
-      description: "A social networking platform for pet owners featuring user-friendly interfaces, advanced search tools, and multilingual support.",
-      tags: ["React.js", "API Integration"],
+      title: "DocMiddleware",
+      description: "AI-powered document processing platform that extracts invoice data using Gemini API, achieving 100% confidence on 141 documents with 4.9s average latency. Features custom schema builder allowing users to define extraction fields without code, plus human-in-the-loop review workflow with status tracking.",
+      tags: ["Supabase", "Gemini API", "React"],
       links: {
-        demo: "https://pawsconnect.demo",
-        github: "https://github.com/Aryamannn/pawsconnect"
+        demo: "https://gina-two.vercel.app/dashboard",
+        github: "https://github.com/Aryamannn/docmiddleware"
       }
     },
     {
-      title: "Library Management System",
-      description: "Mobile application for streamlined book management with administrative controls and user-friendly interface.",
-      tags: ["Android Studio", "Database"],
+      title: "AI Chatbot Dashboard",
+      description: "Multi-tenant AI assistant platform that transforms knowledge bases into customer-facing chatbots with no training required. Features one-click embed system for deployment on any website with a single line of code. Implements zero-trust architecture ensuring user data is never stored or used for model training.",
+      tags: ["FastAPI", "Supabase", "Gemini API", "React"],
       links: {
-        demo: "https://library-demo.com",
-        github: "https://github.com/Aryamannn/library-management"
+        demo: null,
+        github: "https://github.com/Aryamannn/ai-chatbot-dashboard"
       }
     },
     {
-      title: "Twitter Sentiment Analysis",
-      description: "Platform for analyzing Twitter hashtags with sentiment analysis algorithms and visual data representation.",
-      tags: ["Data Analysis", "Visualization"],
+      title: "Resume AI Analyzer",
+      description: "Dual-mode AI platform helping candidates optimize resumes against job descriptions and recruiters evaluate candidate fit instantly. Integrates PDF parsing with AI analysis to provide actionable feedback on resume-to-JD alignment.",
+      tags: ["Python", "Gemini API", "React"],
       links: {
-        demo: "https://sentiment-demo.com",
-        github: "https://github.com/Aryamannn/sentiment-analysis"
+        demo: null,
+        github: "https://github.com/Aryamannn/resume-ai-analyzer"
       }
     }
   ];
@@ -390,18 +387,20 @@ const Projects = () => {
               ))}
             </div>
             <div className="flex gap-4">
-              <a 
-                href={project.links.demo}
-                target="_blank"
-                rel="noopener noreferrer" 
-                className="text-blue-400 hover:text-white hover:underline transition-colors"
-              >
-                Demo
-              </a>
-              <a 
+              {project.links.demo && (
+                <a
+                  href={project.links.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-white hover:underline transition-colors"
+                >
+                  Demo
+                </a>
+              )}
+              <a
                 href={project.links.github}
                 target="_blank"
-                rel="noopener noreferrer" 
+                rel="noopener noreferrer"
                 className="text-blue-400 hover:text-white hover:underline transition-colors"
               >
                 GitHub
@@ -461,7 +460,7 @@ const Portfolio = () => {
                   variants={fadeInUp}
                   className="text-xl text-gray-400 mb-8 max-w-2xl"
                 >
-                  Computer Science Student | Full Stack Developer | Problem Solver
+                  Software Engineer | Full Stack Developer | AI/Data Solutions
                 </motion.p>
                 
                 <motion.div
@@ -473,7 +472,7 @@ const Portfolio = () => {
                   {[
                     { href: "https://github.com/Aryamannn", icon: Github, label: "GitHub" },
                     { href: "https://www.linkedin.com/in/aryamanmishra/", icon: Linkedin, label: "LinkedIn" },
-                    { href: "mailto:mishraaryaman2003@gmail.com", icon: Mail, label: "Email" }
+                    { href: "mailto:aryaman.mmishra@gmail.com", icon: Mail, label: "Email" }
                   ].map((social, index) => (
                     <motion.a
                       key={index}
@@ -523,7 +522,7 @@ const Portfolio = () => {
                 <h3 className="text-xl font-bold text-white mb-6">Contact Information</h3>
                 <div className="space-y-4">
                   {[
-                    { icon: Mail, href: "mailto:mishraaryaman2003@gmail.com", text: "mishraaryaman2003@gmail.com" },
+                    { icon: Mail, href: "mailto:aryaman.mmishra@gmail.com", text: "aryaman.mmishra@gmail.com" },
                     { icon: Phone, href: "tel:+18317180852", text: "+1 (831) 718 0852" },
                     { icon: Github, href: "https://github.com/Aryamannn", text: "github.com/Aryamannn" },
                     { icon: Linkedin, href: "https://www.linkedin.com/in/aryamanmishra/", text: "linkedin.com/in/aryamanmishra" }
@@ -595,7 +594,7 @@ const Portfolio = () => {
                 {[
                   { href: "https://github.com/Aryamannn", icon: Github },
                   { href: "https://www.linkedin.com/in/aryamanmishra/", icon: Linkedin },
-                  { href: "mailto:mishraaryaman2003@gmail.com", icon: Mail }
+                  { href: "mailto:aryaman.mmishra@gmail.com", icon: Mail }
                 ].map((social, index) => (
                   <a 
                     key={index}
