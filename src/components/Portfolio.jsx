@@ -299,7 +299,7 @@ const Hero = () => (
         transition={{ delay: 0.7, duration: 0.8 }}
         className="mt-8 text-white/35 text-xs md:text-sm tracking-[0.2em] uppercase"
       >
-        Software Engineer &nbsp;·&nbsp; Full Stack &nbsp;·&nbsp; AI / Data
+        AI / Software Developer &nbsp;·&nbsp; Full Stack &nbsp;·&nbsp; AI / Data
       </motion.p>
 
       <motion.div
@@ -378,7 +378,7 @@ const About = () => (
           Mishra
         </h2>
         <p className="text-white/35 text-xs mt-4 tracking-[0.2em] uppercase">
-          Software Engineer
+          AI / Software Developer
         </p>
       </div>
     </div>
